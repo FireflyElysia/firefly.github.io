@@ -3,7 +3,6 @@
 <head>
     <title>生命因何而沉睡</title>
     <style>
-        /* 基础样式 */
         body {
             margin: 0;
             padding: 20px;
@@ -11,7 +10,6 @@
             font-family: 'Microsoft YaHei', sans-serif;
         }
 
-        /* 标题样式 */
         .page-title {
             text-align: center;
             font-size: 2em;
@@ -20,7 +18,6 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
-        /* 图片容器 */
         .container {
             display: flex;
             justify-content: center;
@@ -29,7 +26,6 @@
             max-width: 1000px;
         }
 
-        /* 图片样式 */
         .resized-image {
             width: 100%;
             max-width: 800px;
@@ -44,7 +40,6 @@
             opacity: 0;
         }
 
-        /* 滑动条样式 */
         .slider-container {
             text-align: center;
             margin: 30px auto;
@@ -79,7 +74,6 @@
             box-shadow: 0 2px 6px rgba(231, 76, 60, 0.3);
         }
 
-        /* 悬浮窗样式 */
         .floating-panel {
             position: fixed;
             right: 40px;
@@ -97,6 +91,8 @@
             max-width: 220px;
             backdrop-filter: blur(5px);
             animation: float 3s ease-in-out infinite;
+            text-align: center;
+            white-space: pre-line;
         }
 
         @keyframes float {
@@ -104,7 +100,6 @@
             50% { transform: translateY(-50%) translateY(-12px); }
         }
 
-        /* 响应式设计 */
         @media (max-width: 768px) {
             .container {
                 margin-bottom: 15px;
@@ -144,15 +139,10 @@
         <input type="range" id="imageSlider" min="0" max="9" value="0">
     </div>
 
-    <div class="floating-panel">
-        <div>「我梦见一片焦土」</div>
-        <div>「一株破土而生的新蕊」</div>
-        <div>「它迎着朝阳绽放」</div>
-        <div>「向我低语呢喃」</div>
-    </div>
+    <div class="floating-panel" id="poetryPanel"></div>
 
     <script>
-        // 图片路径配置（请根据实际目录结构调整）
+        // 图片路径配置
         const imagePaths = [
             '秘密基地.jpg',
             '合照.jpg',
@@ -166,13 +156,26 @@
             '芜湖.jpg'
         ];
 
-        // 初始化
+        // 李白诗句库
+        const poetryVerses = [
+            "床前明月光，\n疑是地上霜。\n举头望明月，\n低头思故乡。",
+            "朝辞白帝彩云间，\n千里江陵一日还。\n两岸猿声啼不住，\n轻舟已过万重山。",
+            "花间一壶酒，\n独酌无相亲。\n举杯邀明月，\n对影成三人。",
+            "君不见黄河之水天上来，\n奔流到海不复回。",
+            "长风破浪会有时，\n直挂云帆济沧海。",
+            "安能摧眉折腰事权贵，\n使我不得开心颜！",
+            "抽刀断水水更流，\n举杯消愁愁更愁。\n人生在世不称意，\n明朝散发弄扁舟。",
+            "云想衣裳花想容，\n春风拂槛露华浓。\n若非群玉山头见，\n会向瑶台月下逢。",
+            "孤帆远影碧空尽，\n唯见长江天际流。",
+            "仰天大笑出门去，\n我辈岂是蓬蒿人。"
+        ];
+
         const init = () => {
             const slider = document.getElementById('imageSlider');
             const mainImage = document.getElementById('mainImage');
+            const poetryPanel = document.getElementById('poetryPanel');
             let isAnimating = false;
 
-            // 图片切换函数
             const changeImage = (index) => {
                 if (isAnimating) return;
                 isAnimating = true;
@@ -185,7 +188,6 @@
                 }, 300);
             }
 
-            // 更新滑动条样式
             const updateSliderProgress = (value) => {
                 const percentage = (value / 9) * 100;
                 slider.style.background = `
@@ -196,20 +198,26 @@
                 `;
             }
 
-            // 事件监听
+            const updatePoetry = (index) => {
+                poetryPanel.textContent = poetryVerses[index];
+            }
+
             slider.addEventListener('input', (e) => {
                 const index = parseInt(e.target.value);
                 changeImage(index);
                 updateSliderProgress(index);
+                updatePoetry(index);
             });
 
             // 预加载图片
             imagePaths.forEach(src => {
                 new Image().src = src;
             });
+
+            // 初始化显示
+            updatePoetry(0);
         }
 
-        // 页面加载后初始化
         window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
