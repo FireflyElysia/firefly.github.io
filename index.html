@@ -50,6 +50,12 @@
             box-shadow: 0 6px 20px rgba(0,0,0,0.15);
             transition: opacity 0.5s ease;
             opacity: 1;
+            border: 3px solid;
+            border-image: linear-gradient(45deg, #e0e0e0, #f0f0f0) 1;
+            border-radius: 15px;
+            box-shadow:
+             0 0 0 3px #e0e0e0,
+             0 6px 20px rgba(0,0,0,0.15);
         }
 
         .resized-image.fade {
@@ -334,7 +340,6 @@
             '芜湖.jpg'
         ];
 
-        // 李白诗句库
         const poetryVerses = [
             "床前明月光，\n疑是地上霜。\n举头望明月，\n低头思故乡。",
             "朝辞白帝彩云间，\n千里江陵一日还。\n两岸猿声啼不住，\n轻舟已过万重山。",
@@ -403,7 +408,7 @@
                 `;
             }
 
-            // 更新诗歌内容
+            // 更新内容
             const updatePoetry = (index) => {
                 poetryPanel.textContent = poetryVerses[index];
             }
