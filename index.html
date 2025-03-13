@@ -6,11 +6,26 @@
         body {
             margin: 0;
             padding: 20px;
-            background: #f8f9fa;
+            background: #f8f9fa url('背景.jpg') no-repeat center center fixed;
+            background-size: cover;
             font-family: 'Microsoft YaHei', sans-serif;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.92);
+            z-index: 0;
         }
 
         .page-title {
+            position: relative;
             text-align: center;
             font-size: 2em;
             color: #2c3e50;
@@ -19,6 +34,7 @@
         }
 
         .container {
+            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -41,6 +57,7 @@
         }
 
         .slider-container {
+            position: relative;
             text-align: center;
             margin: 30px auto;
             width: 100%;
@@ -74,13 +91,12 @@
             box-shadow: 0 2px 6px rgba(231, 76, 60, 0.3);
         }
 
-        /* 右侧诗歌面板 */
         .right-panel {
             position: fixed;
             right: 40px;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.85);
             padding: 25px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.12);
@@ -90,20 +106,19 @@
             color: #34495e;
             line-height: 1.8;
             max-width: 220px;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
             animation: float 3s ease-in-out infinite;
             text-align: center;
             white-space: pre-line;
             z-index: 100;
         }
 
-        /* 左侧控制面板 */
         .left-panel {
             position: fixed;
             left: 40px;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.85);
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.12);
@@ -111,6 +126,7 @@
             cursor: default;
             max-width: 160px;
             animation: floatLeft 3s ease-in-out infinite;
+            backdrop-filter: blur(8px);
             z-index: 100;
         }
 
@@ -157,7 +173,6 @@
             font-weight: bold;
         }
 
-        /* 模态框样式 */
         .modal-mask {
             position: fixed;
             top: 0;
@@ -172,7 +187,7 @@
         }
 
         .modal-content {
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             padding: 30px;
             border-radius: 12px;
             width: 80%;
@@ -180,6 +195,7 @@
             position: relative;
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
             animation: modalEnter 0.3s ease-out;
+            backdrop-filter: blur(10px);
         }
 
         .modal-close {
@@ -344,11 +360,11 @@
             },
             gallery: {
                 title: '图集信息',
-                content: `共收录${imagePaths.length}幅作品\n拍摄时间：2024-2025`
+                content: `共收录${imagePaths.length}幅作品\n拍摄时间：2020-2023`
             },
             contact: {
                 title: '联系方式',
-                content: '电子邮箱：firefly@star.com\n工作室地址：北京房山区'
+                content: '电子邮箱：art@life.com\n工作室地址：上海杨浦区'
             }
         };
 
