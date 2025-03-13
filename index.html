@@ -152,25 +152,19 @@
     </div>
 
     <script>
-        // 图片预加载
-        const preloadImages = () => {
-            const imagePaths = [
-                '秘密基地.jpg',
-                '合照.jpg',
-                'images/image2.jpg',
-                'images/image3.jpg',
-                'images/image4.jpg',
-                'images/image5.jpg',
-                'images/image6.jpg',
-                'images/image7.jpg',
-                'images/image8.jpg',
-                'images/image9.jpg'
-            ];
-
-            imagePaths.forEach(src => {
-                new Image().src = src;
-            });
-        }
+        // 图片路径配置（请根据实际目录结构调整）
+        const imagePaths = [
+            '秘密基地.jpg',
+            '合照.jpg',
+            'images/image2.jpg',
+            'images/image3.jpg',
+            'images/image4.jpg',
+            'images/image5.jpg',
+            'images/image6.jpg',
+            'images/image7.jpg',
+            'images/image8.jpg',
+            'images/image9.jpg'
+        ];
 
         // 初始化
         const init = () => {
@@ -191,7 +185,7 @@
                 }, 300);
             }
 
-            // 更新滑动条进度
+            // 更新滑动条样式
             const updateSliderProgress = (value) => {
                 const percentage = (value / 9) * 100;
                 slider.style.background = `
@@ -204,17 +198,18 @@
 
             // 事件监听
             slider.addEventListener('input', (e) => {
-                const index = e.target.value;
+                const index = parseInt(e.target.value);
                 changeImage(index);
                 updateSliderProgress(index);
             });
 
-
             // 预加载图片
-            preloadImages();
+            imagePaths.forEach(src => {
+                new Image().src = src;
+            });
         }
 
-        // 启动初始化
+        // 页面加载后初始化
         window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
