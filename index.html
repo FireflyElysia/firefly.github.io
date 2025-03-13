@@ -74,7 +74,8 @@
             box-shadow: 0 2px 6px rgba(231, 76, 60, 0.3);
         }
 
-        .floating-panel {
+        /* 右侧诗歌面板 */
+        .right-panel {
             position: fixed;
             right: 40px;
             top: 50%;
@@ -93,6 +94,121 @@
             animation: float 3s ease-in-out infinite;
             text-align: center;
             white-space: pre-line;
+            z-index: 100;
+        }
+
+        /* 左侧控制面板 */
+        .left-panel {
+            position: fixed;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            border-left: 5px solid #e74c3c;
+            cursor: default;
+            max-width: 160px;
+            animation: floatLeft 3s ease-in-out infinite;
+            z-index: 100;
+        }
+
+        .panel-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: none;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 8px;
+            color: #2c3e50;
+            font-family: 'Microsoft YaHei';
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel-btn::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(231, 76, 60, 0.1);
+            transition: left 0.3s;
+        }
+
+        .panel-btn:hover {
+            transform: translateX(10px);
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .panel-btn:hover::before {
+            left: 0;
+        }
+
+        .panel-btn.active {
+            background: #e74c3c;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* 模态框样式 */
+        .modal-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            animation: modalEnter 0.3s ease-out;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: #e74c3c;
+        }
+
+        .modal-title {
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .modal-body {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #34495e;
+            white-space: pre-line;
         }
 
         @keyframes float {
@@ -100,16 +216,39 @@
             50% { transform: translateY(-50%) translateY(-12px); }
         }
 
-        @media (max-width: 768px) {
-            .container {
-                margin-bottom: 15px;
-            }
+        @keyframes floatLeft {
+            0%, 100% { transform: translateY(-50%) translateX(0); }
+            50% { transform: translateY(-50%) translateX(5px); }
+        }
 
-            .floating-panel {
+        @keyframes modalEnter {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .right-panel {
                 right: 15px;
                 max-width: 150px;
                 padding: 15px;
                 font-size: 0.9em;
+            }
+
+            .left-panel {
+                left: 10px;
+                padding: 15px;
+                max-width: 120px;
+            }
+
+            .panel-btn {
+                padding: 8px;
+                font-size: 0.85em;
             }
 
             #imageSlider {
@@ -120,12 +259,25 @@
                 width: 22px;
                 height: 22px;
             }
+
+            .modal-content {
+                width: 90%;
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <h1 class="page-title">生命因何而沉睡</h1>
     
+    <!-- 左侧控制面板 -->
+    <div class="left-panel">
+        <button class="panel-btn" data-target="intro">简介</button>
+        <button class="panel-btn" data-target="about">关于</button>
+        <button class="panel-btn" data-target="gallery">图集</button>
+        <button class="panel-btn" data-target="contact">联系</button>
+    </div>
+
     <div class="container">
         <img 
             src="秘密基地.jpg" 
@@ -139,7 +291,17 @@
         <input type="range" id="imageSlider" min="0" max="9" value="0">
     </div>
 
-    <div class="floating-panel" id="poetryPanel"></div>
+    <!-- 右侧诗歌面板 -->
+    <div class="right-panel" id="poetryPanel"></div>
+
+    <!-- 模态框 -->
+    <div class="modal-mask" id="modalMask">
+        <div class="modal-content">
+            <span class="modal-close" id="modalClose">&times;</span>
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
 
     <script>
         // 图片路径配置
@@ -170,12 +332,38 @@
             "仰天大笑出门去，\n我辈岂是蓬蒿人。"
         ];
 
+        // 内容配置
+        const contentConfig = {
+            intro: {
+                title: '项目说明',
+                content: '通过滑动条探索生命的不同瞬间\n每帧对应一句诗意阐释'
+            },
+            about: {
+                title: '关于作者',
+                content: '用镜头捕捉生命诗意的探索者\n在光影交错间寻找沉睡的真相'
+            },
+            gallery: {
+                title: '图集信息',
+                content: `共收录${imagePaths.length}幅作品\n拍摄时间：2024-2025`
+            },
+            contact: {
+                title: '联系方式',
+                content: '电子邮箱：firefly@star.com\n工作室地址：北京房山区'
+            }
+        };
+
         const init = () => {
             const slider = document.getElementById('imageSlider');
             const mainImage = document.getElementById('mainImage');
             const poetryPanel = document.getElementById('poetryPanel');
+            const modalMask = document.getElementById('modalMask');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            const modalClose = document.getElementById('modalClose');
+            const buttons = document.querySelectorAll('.panel-btn');
             let isAnimating = false;
 
+            // 图片切换函数
             const changeImage = (index) => {
                 if (isAnimating) return;
                 isAnimating = true;
@@ -188,6 +376,7 @@
                 }, 300);
             }
 
+            // 更新滑动条进度
             const updateSliderProgress = (value) => {
                 const percentage = (value / 9) * 100;
                 slider.style.background = `
@@ -198,15 +387,43 @@
                 `;
             }
 
+            // 更新诗歌内容
             const updatePoetry = (index) => {
                 poetryPanel.textContent = poetryVerses[index];
             }
 
+            // 显示模态框
+            const showModal = (type) => {
+                const config = contentConfig[type];
+                modalTitle.textContent = config.title;
+                modalBody.textContent = config.content;
+                modalMask.style.display = 'flex';
+            }
+
+            // 事件监听
             slider.addEventListener('input', (e) => {
                 const index = parseInt(e.target.value);
                 changeImage(index);
                 updateSliderProgress(index);
                 updatePoetry(index);
+            });
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    buttons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    showModal(this.dataset.target);
+                });
+            });
+
+            modalClose.addEventListener('click', () => {
+                modalMask.style.display = 'none';
+            });
+
+            modalMask.addEventListener('click', (e) => {
+                if(e.target === modalMask) {
+                    modalMask.style.display = 'none';
+                }
             });
 
             // 预加载图片
