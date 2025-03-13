@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>梦想之地</title>
+    <style>
+        /* 标题样式 */
+        .page-title {
+            text-align: center;
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin: 40px 0;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        /* 页面居中容器 */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 50vh;
+        }
+
+        /* 图片样式 */
+        .resized-image {
+            width: 800px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* 新增右侧悬浮窗 */
+        .floating-panel {
+            position: fixed;    /* 固定定位 */
+            right: 30px;        /* 距离右侧30px */
+            top: 50%;           /* 垂直居中定位 */
+            transform: translateY(-50%); /* 精确居中 */
+            
+            /* 视觉样式 */
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-left: 4px solid #e74c3c;
+            
+            /* 文字样式 */
+            font-family: '楷体', cursive;
+            font-size: 1.0em;
+            color: #2c3e50;
+            line-height: 1.6;
+            max-width: 200px;
+            
+            /* 动画效果 */
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* 悬浮动画 */
+        @keyframes float {
+            0%, 100% { transform: translateY(-50%) translateY(0px); }
+            50% { transform: translateY(-50%) translateY(-10px); }
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .floating-panel {
+                right: 10px;
+                bottom: 20px;
+                top: auto;
+                transform: none;
+                max-width: 120px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="page-title">生命因何而沉睡</h1>
+    
+    <div class="container">
+        <img 
+            src="D:\快速访问\图片\Saved Pictures\秘密基地.png" 
+            alt="本地图片" 
+            class="resized-image"
+        >
+    </div>
+
+    <!-- 新增悬浮窗 -->
+    <div class="floating-panel">
+        <div>「我梦见一片焦土」</div>
+        <div>「一株破土而生的新蕊」</div>
+        <div>「它迎着朝阳绽放」</div>
+        <div>「向我低语呢喃」</div>
+    </div>
+</body>
+</html>
