@@ -1,73 +1,129 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>梦想之地</title>
+    <title>生命因何而沉睡</title>
     <style>
-        /* 标题样式 */
-        .page-title {
-            text-align: center;
-            font-size: 1.5em;
-            color: #2c3e50;
-            margin: 40px 0;
+        /* 基础样式 */
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
             font-family: 'Microsoft YaHei', sans-serif;
         }
 
-        /* 页面居中容器 */
+        /* 标题样式 */
+        .page-title {
+            text-align: center;
+            font-size: 2em;
+            color: #2c3e50;
+            margin: 40px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* 图片容器 */
         .container {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 50vh;
+            margin: 0 auto 30px;
+            max-width: 1000px;
         }
 
         /* 图片样式 */
         .resized-image {
-            width: 800px;
+            width: 100%;
+            max-width: 800px;
             height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            transition: opacity 0.5s ease;
+            opacity: 1;
         }
 
-        /* 新增右侧悬浮窗 */
+        .resized-image.fade {
+            opacity: 0;
+        }
+
+        /* 滑动条样式 */
+        .slider-container {
+            text-align: center;
+            margin: 30px auto;
+            width: 100%;
+            max-width: 840px;
+            padding: 0 20px;
+        }
+
+        #imageSlider {
+            width: 100%;
+            height: 12px;
+            background: linear-gradient(90deg, #e74c3c 0%, #e74c3c 0%, #f1f1f1 0%);
+            outline: none;
+            border-radius: 8px;
+            margin: 20px 0;
+            transition: background 0.3s;
+        }
+
+        #imageSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 28px;
+            height: 28px;
+            background: #fff;
+            border: 3px solid #e74c3c;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        #imageSlider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 2px 6px rgba(231, 76, 60, 0.3);
+        }
+
+        /* 悬浮窗样式 */
         .floating-panel {
-            position: fixed;    /* 固定定位 */
-            right: 30px;        /* 距离右侧30px */
-            top: 50%;           /* 垂直居中定位 */
-            transform: translateY(-50%); /* 精确居中 */
-            
-            /* 视觉样式 */
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-            border-left: 4px solid #e74c3c;
-            
-            /* 文字样式 */
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            border-left: 5px solid #e74c3c;
             font-family: '楷体', cursive;
-            font-size: 1.0em;
-            color: #2c3e50;
-            line-height: 1.6;
-            max-width: 200px;
-            
-            /* 动画效果 */
+            font-size: 1.1em;
+            color: #34495e;
+            line-height: 1.8;
+            max-width: 220px;
+            backdrop-filter: blur(5px);
             animation: float 3s ease-in-out infinite;
         }
 
-        /* 悬浮动画 */
         @keyframes float {
-            0%, 100% { transform: translateY(-50%) translateY(0px); }
-            50% { transform: translateY(-50%) translateY(-10px); }
+            0%, 100% { transform: translateY(-50%) translateY(0); }
+            50% { transform: translateY(-50%) translateY(-12px); }
         }
 
-        /* 移动端适配 */
+        /* 响应式设计 */
         @media (max-width: 768px) {
+            .container {
+                margin-bottom: 15px;
+            }
+
             .floating-panel {
-                right: 10px;
-                bottom: 20px;
-                top: auto;
-                transform: none;
-                max-width: 120px;
-                font-size: 1em;
+                right: 15px;
+                max-width: 150px;
+                padding: 15px;
+                font-size: 0.9em;
+            }
+
+            #imageSlider {
+                height: 8px;
+            }
+
+            #imageSlider::-webkit-slider-thumb {
+                width: 22px;
+                height: 22px;
             }
         }
     </style>
@@ -78,17 +134,88 @@
     <div class="container">
         <img 
             src="秘密基地.jpg" 
-            alt="本地图片" 
+            alt="动态图片" 
             class="resized-image"
+            id="mainImage"
         >
     </div>
 
-    <!-- 新增悬浮窗 -->
+    <div class="slider-container">
+        <input type="range" id="imageSlider" min="0" max="9" value="0">
+    </div>
+
     <div class="floating-panel">
         <div>「我梦见一片焦土」</div>
         <div>「一株破土而生的新蕊」</div>
         <div>「它迎着朝阳绽放」</div>
         <div>「向我低语呢喃」</div>
     </div>
+
+    <script>
+        // 图片预加载
+        const preloadImages = () => {
+            const imagePaths = [
+                '秘密基地.jpg',
+                '合照.jpg',
+                'images/image2.jpg',
+                'images/image3.jpg',
+                'images/image4.jpg',
+                'images/image5.jpg',
+                'images/image6.jpg',
+                'images/image7.jpg',
+                'images/image8.jpg',
+                'images/image9.jpg'
+            ];
+
+            imagePaths.forEach(src => {
+                new Image().src = src;
+            });
+        }
+
+        // 初始化
+        const init = () => {
+            const slider = document.getElementById('imageSlider');
+            const mainImage = document.getElementById('mainImage');
+            let isAnimating = false;
+
+            // 图片切换函数
+            const changeImage = (index) => {
+                if (isAnimating) return;
+                isAnimating = true;
+                
+                mainImage.classList.add('fade');
+                setTimeout(() => {
+                    mainImage.src = imagePaths[index];
+                    mainImage.classList.remove('fade');
+                    isAnimating = false;
+                }, 300);
+            }
+
+            // 更新滑动条进度
+            const updateSliderProgress = (value) => {
+                const percentage = (value / 9) * 100;
+                slider.style.background = `
+                    linear-gradient(90deg, 
+                    #e74c3c 0%, 
+                    #e74c3c ${percentage}%, 
+                    #f1f1f1 ${percentage}%)
+                `;
+            }
+
+            // 事件监听
+            slider.addEventListener('input', (e) => {
+                const index = e.target.value;
+                changeImage(index);
+                updateSliderProgress(index);
+            });
+
+
+            // 预加载图片
+            preloadImages();
+        }
+
+        // 启动初始化
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 </html>
