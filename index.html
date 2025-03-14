@@ -423,10 +423,10 @@
 
             // 事件监听
             slider.addEventListener('input', (e) => {
-                const index = parseInt(e.target.value);
-                changeImage(index);
-                updateSliderProgress(index);
-                updatePoetry(index);
+            const index = parseInt(e.target.value);
+            changeImage(index);
+            updateSliderProgress(index);
+            updatePoetry(index);
             });
 
             buttons.forEach(button => {
@@ -454,6 +454,10 @@
 
             // 初始化显示
             updatePoetry(0);
+
+            // 初始化弹窗逻辑
+            buttons[0].classList.add('active');  // 激活"简介"按钮
+            showModal('intro');  // 显示简介弹窗
         }
 
         window.addEventListener('DOMContentLoaded', init);
