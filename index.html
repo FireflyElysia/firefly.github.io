@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>生命因何而沉睡</title>
+    <title>这个是网站名</title>
     <style>
+        /* 基础样式 */
         body {
             margin: 0;
             padding: 20px;
@@ -13,6 +14,7 @@
             position: relative;
         }
 
+        /* 半透明遮罩层 */
         body::before {
             content: '';
             position: fixed;
@@ -24,15 +26,42 @@
             z-index: 0;
         }
 
+        /* 主标题样式 */
         .page-title {
             position: relative;
             text-align: center;
             font-size: 2em;
-            color: #2c3e50;
+            color: #ff0000;
             margin: 40px 0;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
+        /* 主内容容器 */
+        .main-page {
+            position: relative;
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        /* 可点击热点样式 */
+        .hotspot {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #ff4757;
+            border-radius: 50%;
+            cursor: pointer;
+            animation: pulse 1.5s infinite;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px rgba(255, 71, 87, 0.6);
+        }
+
+        /* 分支内容初始隐藏 */
+        .branch-content {
+            display: none;
+        }
+
+        /* 图片容器 */
         .container {
             position: relative;
             display: flex;
@@ -42,6 +71,7 @@
             max-width: 1000px;
         }
 
+        /* 响应式图片 */
         .resized-image {
             width: 100%;
             max-width: 800px;
@@ -54,49 +84,162 @@
             border-image: linear-gradient(45deg, #e0e0e0, #f0f0f0) 1;
             border-radius: 15px;
             box-shadow:
-             0 0 0 3px #e0e0e0,
-             0 6px 20px rgba(0,0,0,0.15);
+                0 0 0 3px #e0e0e0,
+                0 6px 20px rgba(0,0,0,0.15);
         }
 
-        .resized-image.fade {
-            opacity: 0;
-        }
-
+        /* 滑动条容器 */
         .slider-container {
             position: relative;
             text-align: center;
-            margin: 30px auto;
+            margin: 40px auto;
             width: 100%;
-            max-width: 840px;
+            max-width: 1000px;
             padding: 0 20px;
         }
 
-        #imageSlider {
+        /* 滑动条样式 */
+        .branch-slider {
             width: 100%;
-            height: 12px;
-            background: linear-gradient(90deg, #e74c3c 0%, #e74c3c 0%, #f1f1f1 0%);
+            height: 8px;
+            -webkit-appearance: none;
+            background: #f1f1f1;
+            border-radius: 4px;
             outline: none;
-            border-radius: 8px;
-            margin: 20px 0;
-            transition: background 0.3s;
+            opacity: 0.9;
+            transition: opacity 0.2s;
         }
 
-        #imageSlider::-webkit-slider-thumb {
+        /* 滑动条轨道 */
+        .branch-slider::-webkit-slider-runnable-track {
+            height: 8px;
+            background: #dacece;
+            border-radius: 4px;
+        }
+
+        /* 滑动条滑块 */
+        .branch-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 28px;
-            height: 28px;
-            background: #fff;
-            border: 3px solid #e74c3c;
+            width: 20px;
+            height: 20px;
+            background: #e74c3c;
             border-radius: 50%;
             cursor: pointer;
-            transition: all 0.2s;
+            margin-top: -6px;
+            box-shadow: 0 2px 8px rgba(231,76,60,0.3);
+            transition: transform 0.2s;
         }
 
-        #imageSlider::-webkit-slider-thumb:hover {
-            transform: scale(1.15);
-            box-shadow: 0 2px 6px rgba(231, 76, 60, 0.3);
+        /* 左侧控制面板 */
+        .left-panel {
+            position: fixed;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.88);
+            padding: 18px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border-left: 4px solid #e74c3c;
+            cursor: default;
+            max-width: 180px;
+            backdrop-filter: blur(12px);
+            animation: floatLeft 3s ease-in-out infinite;
+            z-index: 100;
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
+        /* 面板按钮样式 */
+        .panel-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: none;
+            background: rgba(231, 76, 60, 0.08);
+            border-radius: 8px;
+            color: #2c3e50;
+            font-family: 'Microsoft YaHei';
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        /* 模态框标题 */
+        .modal-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        /* 返回按钮 */
+        .return-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 24px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            transition: all 0.3s ease;
+            display: none;
+            z-index: 1000;
+        }
+        /* 新增模态框内容样式 */
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px 40px;
+            border-radius: 15px;
+            width: 85%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            animation: modalEnter 0.3s ease-out;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* 修复关闭按钮位置 */
+        .modal-close {
+            position: absolute;
+            top: 18px;
+            right: 22px;
+            font-size: 28px;
+            padding: 4px;
+            line-height: 1;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: #e74c3c;
+            transform: scale(1.1);
+        }
+
+        /* 确保模态框在最顶层 */
+        .modal-mask {
+            z-index: 9999;
+        }
+
+        /* 修复按钮点击状态 */
+        .panel-btn:active {
+            transform: translateX(8px) scale(0.98);
+        }
+        /* 右侧诗歌面板 */
         .right-panel {
             position: fixed;
             right: 40px;
@@ -108,7 +251,7 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.12);
             border-left: 5px solid #e74c3c;
             font-family: '楷体', cursive;
-            font-size: 1.1em;
+            font-size: 1.5em;
             color: #34495e;
             line-height: 1.8;
             max-width: 220px;
@@ -117,68 +260,10 @@
             text-align: center;
             white-space: pre-line;
             z-index: 100;
+            display: none;
         }
 
-        .left-panel {
-            position: fixed;
-            left: 40px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.85);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-            border-left: 5px solid #e74c3c;
-            cursor: default;
-            max-width: 160px;
-            animation: floatLeft 3s ease-in-out infinite;
-            backdrop-filter: blur(8px);
-            z-index: 100;
-        }
-
-        .panel-btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border: none;
-            background: rgba(231, 76, 60, 0.1);
-            border-radius: 8px;
-            color: #2c3e50;
-            font-family: 'Microsoft YaHei';
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .panel-btn::before {
-            content: '';
-            position: absolute;
-            left: -100%;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(231, 76, 60, 0.1);
-            transition: left 0.3s;
-        }
-
-        .panel-btn:hover {
-            transform: translateX(10px);
-            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .panel-btn:hover::before {
-            left: 0;
-        }
-
-        .panel-btn.active {
-            background: #e74c3c;
-            color: white;
-            font-weight: bold;
-        }
-
+        /* 模态框遮罩层 */
         .modal-mask {
             position: fixed;
             top: 0;
@@ -192,55 +277,20 @@
             z-index: 1000;
         }
 
-        .modal-content {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 12px;
-            width: 80%;
-            max-width: 600px;
-            position: relative;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            animation: modalEnter 0.3s ease-out;
-            backdrop-filter: blur(10px);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #666;
-            transition: color 0.2s;
-        }
-
-        .modal-close:hover {
-            color: #e74c3c;
-        }
-
-        .modal-title {
-            font-size: 1.4em;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-        }
-
-        .modal-body {
-            font-size: 1.1em;
-            line-height: 1.8;
-            color: #34495e;
-            white-space: pre-line;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(-50%) translateY(0); }
-            50% { transform: translateY(-50%) translateY(-12px); }
+        /* 动画定义 */
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.7; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
         }
 
         @keyframes floatLeft {
             0%, 100% { transform: translateY(-50%) translateX(0); }
             50% { transform: translateY(-50%) translateX(5px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(-50%) translateY(0); }
+            50% { transform: translateY(-50%) translateY(-12px); }
         }
 
         @keyframes modalEnter {
@@ -253,46 +303,35 @@
                 transform: translateY(0);
             }
         }
-
-        @media (max-width: 768px) {
-            .right-panel {
-                right: 15px;
-                max-width: 150px;
-                padding: 15px;
-                font-size: 0.9em;
-            }
-
-            .left-panel {
-                left: 10px;
-                padding: 15px;
-                max-width: 120px;
-            }
-
-            .panel-btn {
-                padding: 8px;
-                font-size: 0.85em;
-            }
-
-            #imageSlider {
-                height: 8px;
-            }
-
-            #imageSlider::-webkit-slider-thumb {
-                width: 22px;
-                height: 22px;
-            }
-
-            .modal-content {
-                width: 90%;
-                padding: 20px;
-            }
-        }
     </style>
 </head>
 <body>
-    <h1 class="page-title">生命因何而沉睡</h1>
+    <!-- 主标题 -->
+    <h1 class="page-title" id="mainTitle">这个是主标题</h1>
     
-    <!-- 左侧控制面板 -->
+    <!-- 返回按钮 -->
+    <button class="return-btn" id="returnBtn">⬅返回主界面</button>
+
+    <!-- 主内容区 -->
+    <div class="main-page">
+        <img src="主页面.jpg" class="resized-image" id="mainImage">
+        <!-- 交互热点 -->
+        <div class="hotspot" style="top: 35%; left: 30%;" data-branch="memory"></div>
+        <div class="hotspot" style="top: 60%; left: 50%;" data-branch="growth"></div>
+        <div class="hotspot" style="top: 45%; left: 70%;" data-branch="eternity"></div>
+    </div>
+
+    <!-- 分支内容区 -->
+    <div class="branch-content">
+        <div class="container">
+            <img src="" alt="分支图片" class="resized-image" id="branchImage">
+        </div>
+        <div class="slider-container">
+            <input type="range" class="branch-slider" min="0" max="9" value="0">
+        </div>
+    </div>
+
+    <!-- 左侧功能面板 -->
     <div class="left-panel">
         <button class="panel-btn" data-target="intro">简介</button>
         <button class="panel-btn" data-target="about">关于</button>
@@ -300,23 +339,10 @@
         <button class="panel-btn" data-target="contact">联系</button>
     </div>
 
-    <div class="container">
-        <img 
-            src="秘密基地.jpg" 
-            alt="动态图片" 
-            class="resized-image"
-            id="mainImage"
-        >
-    </div>
-
-    <div class="slider-container">
-        <input type="range" id="imageSlider" min="0" max="9" value="0">
-    </div>
-
     <!-- 右侧诗歌面板 -->
     <div class="right-panel" id="poetryPanel"></div>
 
-    <!-- 模态框 -->
+    <!-- 模态对话框 -->
     <div class="modal-mask" id="modalMask">
         <div class="modal-content">
             <span class="modal-close" id="modalClose">&times;</span>
@@ -326,140 +352,136 @@
     </div>
 
     <script>
-        // 图片路径配置
-        const imagePaths = [
-            '秘密基地.jpg',
-            '合照.jpg',
-            '嘻嘻.jpg',
-            '嘿嘿.jpg',
-            '萤宝1.jpg',
-            '萤宝2.jpg',
-            '萤宝3.jpg',
-            '萤宝4.jpg',
-            '萤宝5.jpg',
-            '芜湖.jpg'
-        ];
-
-        const poetryVerses = [
-            "床前明月光，\n疑是地上霜。\n举头望明月，\n低头思故乡。",
-            "朝辞白帝彩云间，\n千里江陵一日还。\n两岸猿声啼不住，\n轻舟已过万重山。",
-            "花间一壶酒，\n独酌无相亲。\n举杯邀明月，\n对影成三人。",
-            "君不见黄河之水天上来，\n奔流到海不复回。",
-            "长风破浪会有时，\n直挂云帆济沧海。",
-            "安能摧眉折腰事权贵，\n使我不得开心颜！",
-            "抽刀断水水更流，\n举杯消愁愁更愁。\n人生在世不称意，\n明朝散发弄扁舟。",
-            "云想衣裳花想容，\n春风拂槛露华浓。\n若非群玉山头见，\n会向瑶台月下逢。",
-            "孤帆远影碧空尽，\n唯见长江天际流。",
-            "仰天大笑出门去，\n我辈岂是蓬蒿人。"
-        ];
-
-        // 内容配置
-        const contentConfig = {
-            intro: {
-                title: '项目说明',
-                content: '通过滑动条探索生命的不同瞬间\n每帧对应一句诗意阐释'
+        // 分支数据配置
+        const branches = {
+            memory: {
+                title: "这个是分支1号",
+                images: ['嘻嘻.jpg','合照.jpg','秘密基地.jpg','嘿嘿.jpg','萤宝1.jpg','萤宝2.jpg','萤宝3.jpg','萤宝4.jpg','萤宝5.jpg','芜湖.jpg'],
+                poetry: ["昔我往矣，杨柳依依", "今我来思，雨雪霏霏", "夜来幽梦忽还乡", "小轩窗，正梳妆", "此情可待成追忆", 
+                        "只是当时已惘然", "十年生死两茫茫", "不思量，自难忘", "赌书消得泼茶香", "当时只道是寻常"]
             },
-            about: {
-                title: '关于作者',
-                content: '用镜头捕捉生命诗意的探索者\n在光影交错间寻找沉睡的真相'
+            growth: {
+                title: "这个是分支2号",
+                images: ['合照.jpg','秘密基地.jpg','嘻嘻.jpg','嘿嘿.jpg','萤宝1.jpg','萤宝2.jpg','萤宝3.jpg','萤宝4.jpg','萤宝5.jpg','芜湖.jpg'],
+                poetry: ["少年不识愁滋味", "爱上层楼，爱上层楼", "而今识尽愁滋味", "欲说还休，欲说还休", "路漫漫其修远兮",
+                        "吾将上下而求索", "千淘万漉虽辛苦", "吹尽狂沙始到金", "沉舟侧畔千帆过", "病树前头万木春"]
             },
-            gallery: {
-                title: '图集信息',
-                content: `共收录${imagePaths.length}幅作品\n拍摄时间：2020-2023`
-            },
-            contact: {
-                title: '联系方式',
-                content: '电子邮箱：art@life.com\n工作室地址：上海杨浦区'
+            eternity: {
+                title: "这个是分支3号",
+                images: ['秘密基地.jpg','合照.jpg','嘻嘻.jpg','嘿嘿.jpg','萤宝1.jpg','萤宝2.jpg','萤宝3.jpg','萤宝4.jpg','萤宝5.jpg','芜湖.jpg'],
+                poetry: ["床前明月光，\n疑是地上霜。\n举头望明月，\n低头思故乡。",
+                        "朝辞白帝彩云间，\n千里江陵一日还。\n两岸猿声啼不住，\n轻舟已过万重山。",
+                        "花间一壶酒，\n独酌无相亲。\n举杯邀明月，\n对影成三人。",
+                        "君不见黄河之水天上来，\n奔流到海不复回。",
+                        "长风破浪会有时，\n直挂云帆济沧海。",
+                        "安能摧眉折腰事权贵，\n使我不得开心颜！",
+                        "抽刀断水水更流，\n举杯消愁愁更愁。\n人生在世不称意，\n明朝散发弄扁舟。",
+                        "云想衣裳花想容，\n春风拂槛露华浓。\n若非群玉山头见，\n会向瑶台月下逢。",
+                        "孤帆远影碧空尽，\n唯见长江天际流。","仰天大笑出门去，\n我辈岂是蓬蒿人。"]
             }
         };
 
-        const init = () => {
-            const slider = document.getElementById('imageSlider');
-            const mainImage = document.getElementById('mainImage');
-            const poetryPanel = document.getElementById('poetryPanel');
+        // 弹窗内容配置
+        const contentConfig = {
+            intro: { title: '项目说明', content: '通过滑动条探索生命的不同瞬间,每帧对应一句诗意阐释,凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数凑字数' },
+            about: { title: '关于作者', content: '用镜头捕捉生命诗意的探索者,在光影交错间寻找沉睡的真相' },
+            gallery: { title: '图集信息', content: '共收录10幅作品,拍摄时间：2020-2023' },
+            contact: { title: '联系方式', content: '电子邮箱：art@life.com,工作室地址：上海杨浦区' }
+        };
+
+        // 初始化函数
+        function init() {
+            const returnBtn = document.getElementById('returnBtn');
             const modalMask = document.getElementById('modalMask');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalBody = document.getElementById('modalBody');
             const modalClose = document.getElementById('modalClose');
             const buttons = document.querySelectorAll('.panel-btn');
-            let isAnimating = false;
 
-            // 图片切换函数
-            const changeImage = (index) => {
-                if (isAnimating) return;
-                isAnimating = true;
-                
-                mainImage.classList.add('fade');
-                setTimeout(() => {
-                    mainImage.src = imagePaths[index];
-                    mainImage.classList.remove('fade');
-                    isAnimating = false;
-                }, 300);
-            }
-
-            // 更新滑动条进度
-            const updateSliderProgress = (value) => {
-                const percentage = (value / 9) * 100;
-                slider.style.background = `
-                    linear-gradient(90deg, 
-                    #e74c3c 0%, 
-                    #e74c3c ${percentage}%, 
-                    #f1f1f1 ${percentage}%)
-                `;
-            }
-
-            // 更新内容
-            const updatePoetry = (index) => {
-                poetryPanel.textContent = poetryVerses[index];
-            }
-
-            // 显示模态框
-            const showModal = (type) => {
-                const config = contentConfig[type];
-                modalTitle.textContent = config.title;
-                modalBody.textContent = config.content;
-                modalMask.style.display = 'flex';
-            }
-
-            // 事件监听
-            slider.addEventListener('input', (e) => {
-            const index = parseInt(e.target.value);
-            changeImage(index);
-            updateSliderProgress(index);
-            updatePoetry(index);
+            // 绑定热点点击事件
+            document.querySelectorAll('.hotspot').forEach(hotspot => {
+                hotspot.addEventListener('click', function() {
+                    loadBranch(this.dataset.branch);
+                });
             });
 
+            // 返回按钮事件
+            returnBtn.addEventListener('click', () => {
+                document.querySelector('.main-page').style.display = 'block';
+                document.querySelector('.branch-content').style.display = 'none';
+                returnBtn.style.display = 'none';
+                document.getElementById('mainTitle').textContent = '这个是点击返回键后重新加载的主标题';
+                document.getElementById('poetryPanel').style.display = 'none';
+            });
+
+            // 面板按钮事件
             buttons.forEach(button => {
                 button.addEventListener('click', function() {
-                    buttons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
                     showModal(this.dataset.target);
                 });
             });
 
-            modalClose.addEventListener('click', () => {
-                modalMask.style.display = 'none';
-            });
-
+            // 模态框关闭事件
+            modalClose.addEventListener('click', () => modalMask.style.display = 'none');
             modalMask.addEventListener('click', (e) => {
-                if(e.target === modalMask) {
-                    modalMask.style.display = 'none';
-                }
+                if(e.target === modalMask) modalMask.style.display = 'none';
             });
 
-            // 预加载图片
-            imagePaths.forEach(src => {
-                new Image().src = src;
+            // 预加载所有分支图片
+            Object.values(branches).forEach(branch => {
+                branch.images.forEach(src => new Image().src = src);
             });
 
-            // 初始化显示
-            updatePoetry(0);
-
-            // 初始化弹窗逻辑
-            buttons[0].classList.add('active');  // 激活"简介"按钮
-            showModal('intro');  // 显示简介弹窗
+            // 自动显示简介弹窗
+            showModal('intro');
         }
 
+        // 加载分支内容
+        function loadBranch(branchKey) {
+            const branch = branches[branchKey];
+            const branchContent = document.querySelector('.branch-content');
+            
+            // 切换显示内容
+            document.querySelector('.main-page').style.display = 'none';
+            branchContent.style.display = 'block';
+            document.getElementById('returnBtn').style.display = 'block';
+            document.getElementById('mainTitle').textContent = branch.title;
+            document.getElementById('poetryPanel').style.display = 'block';
+
+            // 获取滑动条和图片元素
+            const slider = branchContent.querySelector('.branch-slider');
+            const image = branchContent.querySelector('#branchImage');
+            const poetryPanel = document.getElementById('poetryPanel');
+
+            // 更新内容函数
+            function updateContent(index) {
+                image.src = branch.images[index];
+                poetryPanel.textContent = branch.poetry[index];
+                slider.style.background = `
+                    linear-gradient(90deg, 
+                    #e74c3c 0%, 
+                    #e74c3c ${(index/9)*100}%, 
+                    #f1f1f1 ${(index/9)*100}%)
+                `;
+            }
+
+            // 滑动条事件监听
+            slider.addEventListener('input', (e) => {
+                updateContent(parseInt(e.target.value));
+            });
+
+            // 初始化显示第一项
+            updateContent(0);
+            slider.value = 0;
+        }
+
+        // 显示模态框
+        function showModal(type) {
+            const config = contentConfig[type];
+            document.getElementById('modalTitle').textContent = config.title;
+            document.getElementById('modalBody').textContent = config.content;
+            document.getElementById('modalMask').style.display = 'flex';
+        }
+
+        // 页面加载完成后初始化
         window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
